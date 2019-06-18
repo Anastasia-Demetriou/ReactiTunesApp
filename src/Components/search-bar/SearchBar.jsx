@@ -52,6 +52,7 @@ class SearchBar extends Component {
                     className="form-control form-search"
                     onChange={this.handleChange}
                 />
+                
 
             </form>
             

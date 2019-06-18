@@ -26,7 +26,9 @@ class SongList extends Component {
             
             <div className={ this.state.clicked ? 'selected-song' : null}
             onClick={this.handleClick}>
-
+            <div>  
+                
+            </div>
 
             </div>
             </div>

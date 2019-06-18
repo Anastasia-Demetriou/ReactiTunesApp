@@ -1,74 +1,85 @@
-import React, { Component } from 'react';
-import SearchBar from './search-bar/SearchBar.jsx';
-import SongList from './song_list.jsx';
-import SongRow from './song_row.jsx';
+import React from 'react';
+import { isPending } from 'q';
 
-
-class App extends Component {
-    constructor (props){
-        super (props)
-// this is where the state will change in the lifetime of the application (search, songs, selected songs)
-        this.state = {
-            songs: [], 
-            selectedSongId: "",
-            search: ""
-        }
-        this.search()
-        //this.search = this.search.bind(this);
-    }
-
-        search (searchKey){
-            console.log(this.props.songs)
-            //fetch(`https://itunes.apple.com/search?term=jack+johnson`)
-            return fetch(` https://itunes.apple.com/lookup?=${searchKey}`)
-         
-                .then(response => response.json() )
-                .then(response =>{ 
-                    return response;
-                .catch(error => {
-                    console.log(error);
-                });
-                //.then( ({song: search, media: musicTrack}) => this.setState({selectedSondId}))
-
-            //fetch ('https://itunes.apple.com/search')
-           // .then (response => response.json() )
-            //.then( ({song: search, media: musicTrack}) => this.setState({song}))
-        }
+ class App extends React.Component {
         
-        selectedSong(id) {
-            this.setState({
-                selectedSondId: id
+        constructor(props) {
+            super(props);
+            
+            this.state = {
+                searchValue: "",
+                searchResults: []
+            }
 
-            });
+            this.handleSearch = this.handleSearch.bind(this);
+            this.onSearch = this.onSearch.bind(this);
+            this.fetchItunesData = this.fetchItunesData.bind(this);
+
+       
         }
 
 
-    render() {
-        console.log("TESTING RENDER");
-        return (
-            <div>
-                <div className="left-scene">
-                    <SearchBar 
-                        handleSubmit={this.state.search}
-                        onChange={ e => this.handleSubmit(e)}
-                        handleChange={this.state.search}
-                        onSong={searchKey => {
-                        this.search(searchKey)
-                    } 
+        handleSearch({ target }) {
+            this.setState({
+              searchValue: target.value  
 
-                }/>
-                <SongList songs={this.state.songs} selectedSong={this.state.selectedSong} id={this.state.selectedSongId}/>
-                <SongRow songs={this.state.songs} selectedSong={this.selectedSong} />
-                </div>
-                <div className="right-scene">
-                    <div className="selected-song">
+            })
+    
+        }
 
-                    </div>
-                </div>
-            </div>
-        )
+        
 
+        onSearch() {
+            const { searchValue } = this.state;
+
+            this.fetchItunesData(searchValue)
+                .then(searchResults =>{
+                    this.setState({
+                        searchValue: "",
+                        searchResults,
+
+                    })
+            })
+
+        }
+
+        fetchItunesData(searchValue){
+            const newSearchValue = searchValue.replace('', '+')
+            return fetch(`https://itunes.apple.com/search?term=${newSearchValue}`)
+            .then ( response =>  response.json())
+            .catch (error=>{
+                console.error(error);
+            });
+
+        }
+    
+
+        render(){
+            const { searchResults, searchValue } = this.state;
+            const isEmpty = searchResults.length === 0;
+
+            return (
+                <div>
+                    <input
+                        value={searchValue}
+                        onChange={this.handleSearch}
+                        type="text"
+                        placeholder="search itunes"
+                    />
+                {isEmpty && <h2>Search for an artist</h2>}
+                <button onClick={this.onSearch}>Go!</button>
+            </div>)
+        }
     }
-}
 
-export default App;
+    
+    export default App;       
+         
+
+            
+
+        
+
+    
+
+
