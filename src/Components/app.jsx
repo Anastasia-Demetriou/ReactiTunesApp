@@ -1,5 +1,6 @@
 import React from 'react';
 import Search from './search';
+import SongList from './song_list'; 
 
 
  class App extends React.Component {
@@ -9,7 +10,9 @@ import Search from './search';
                     <div className="left-scene">
                     <Search />
                     </div>
-                    <div className="right-scene"></div>
+                    <div className="right-scene">
+    
+                    </div>
                 
 
                  </div>

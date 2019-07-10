@@ -6,7 +6,8 @@ class SongList extends Component {
         super(props);
 
         this.state = {
-            clicked: false
+            clicked: false,
+            song: []
 
         };
     }
@@ -15,20 +16,21 @@ class SongList extends Component {
         console.log('clicked');
 
 
-    }
+    } 
 
     render (){
         return(
             <div className="song-list">
                 {this.props.songs.map(song => {
-                    return <Songs key={song.id} id={song.id}  selectedSong={props}/>
+                    return <Songs 
+                    key={song.id} 
+                    id={song.id}  
+                    selectedSong={props}/>
                 })}
             
             <div className={ this.state.clicked ? 'selected-song' : null}
             onClick={this.handleClick}>
-            <div>  
-                
-            </div>
+
 
             </div>
             </div>
